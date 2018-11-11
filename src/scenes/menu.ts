@@ -1,5 +1,5 @@
 import {GAME_WIDTH, GAME_HEIGHT} from '../constants';
-import {Scene} from 'phaser';
+import {Scene, Tilemaps} from 'phaser';
 
 interface TextButtonOptions {
   label: string;
@@ -31,6 +31,7 @@ class MenuButton {
 
     this.button.on('pointerup', ev => {
       this.up();
+      scene.sound.play('click');
       setTimeout(() => {
         options.onClick();
       }, 100);
@@ -69,6 +70,7 @@ export class MenuScene extends Phaser.Scene {
   }
 
   preload(): void {
+    this.load.audio('click', ['./assets/audio/menu/click.ogg']);
     this.load.spritesheet('button.gray', './assets/menu/button.gray.png', {
       frameWidth: 190,
       frameHeight: 49,
