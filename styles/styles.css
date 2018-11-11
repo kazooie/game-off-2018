@@ -18,13 +18,14 @@ body {
 
 body div.container {
   text-align: center;
+  margin-top: 2.5rem;
 }
 
 body div.container h1 {
   padding: 0;
   margin: 0;
-  padding: 1rem;
-  font-size: 2rem;
+  padding: 0.75rem;
+  font-size: 1.5rem;
   color: #222;
   position: fixed;
   width: 100%;

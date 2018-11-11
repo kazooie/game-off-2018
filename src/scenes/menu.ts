@@ -1,30 +1,94 @@
+import {GAME_WIDTH, GAME_HEIGHT} from '../constants';
+import {Scene} from 'phaser';
+
+interface TextButtonOptions {
+  label: string;
+  x: number;
+  y: number;
+  onClick: () => void;
+}
+
+class MenuButton {
+  private button: Phaser.GameObjects.Sprite;
+  private text: Phaser.GameObjects.Text;
+
+  constructor(scene: Scene, options: TextButtonOptions) {
+    this.button = scene.add
+      .sprite(options.x, options.y, 'button.gray')
+      .setInteractive() as Phaser.GameObjects.Sprite;
+
+    this.text = scene.add.text(0, 0, options.label, {
+      color: '#000',
+      fontFamily: 'Titillium Web',
+      fontSize: 24,
+    });
+
+    this.up();
+
+    this.button.on('pointerdown', () => {
+      this.down();
+    });
+
+    this.button.on('pointerup', ev => {
+      this.up();
+      setTimeout(() => {
+        options.onClick();
+      }, 100);
+    });
+
+    this.button.on('pointerout', () => {
+      this.text.setStyle({...this.text.style, color: '#000 '});
+      this.up();
+    });
+  }
+
+  private up = () => {
+    this.button.setFrame(0);
+    Phaser.Display.Bounds.CenterOn(
+      this.text,
+      Phaser.Display.Bounds.GetCenterX(this.button),
+      Phaser.Display.Bounds.GetCenterY(this.button) - 3
+    );
+  };
+
+  private down = () => {
+    this.button.setFrame(1);
+    Phaser.Display.Bounds.CenterOn(
+      this.text,
+      Phaser.Display.Bounds.GetCenterX(this.button),
+      Phaser.Display.Bounds.GetCenterY(this.button)
+    );
+  };
+}
+
 export class MenuScene extends Phaser.Scene {
   constructor() {
     super({
-      key: 'Menu',
+      key: 'Scene.Menu',
     });
   }
 
   preload(): void {
-    this.load.image('button', './assets/menu/grey_button06.png');
+    this.load.spritesheet('button.gray', './assets/menu/button.gray.png', {
+      frameWidth: 190,
+      frameHeight: 49,
+      startFrame: 1,
+    });
   }
 
   create(): void {
-    const button = this.add.image(400, 300, 'button').setInteractive();
-    const text = this.add.text(345, 285, 'Start Game', {
-      color: '#000',
-      fontFamily: 'Titillium Web',
-      fontSize: 24,
-      align: 'center',
+    new MenuButton(this, {
+      label: 'Start Game',
+      x: GAME_WIDTH / 2,
+      y: GAME_HEIGHT / 2,
+      onClick: () => this.scene.start('Scene.Main'),
     });
-    button.on('pointerup', ev => {
-      this.scene.start('MainScene');
-    });
-    button.on('pointerover', () => {
-      text.setStyle({ ...text.style, color: '#d00 ' });
-    });
-    button.on('pointerout', () => {
-      text.setStyle({ ...text.style, color: '#000 ' });
+
+    new MenuButton(this, {
+      label: 'Options',
+      x: GAME_WIDTH / 2,
+      y: GAME_HEIGHT / 2 + 80,
+      onClick: () => this.scene.start('Scene.Options'),
     });
   }
 }
