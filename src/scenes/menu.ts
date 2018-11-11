@@ -1,71 +1,11 @@
-import {GAME_WIDTH, GAME_HEIGHT} from '../constants';
-import {Scene, Tilemaps} from 'phaser';
-
-interface TextButtonOptions {
-  label: string;
-  x: number;
-  y: number;
-  onClick: () => void;
-}
-
-class MenuButton {
-  private button: Phaser.GameObjects.Sprite;
-  private text: Phaser.GameObjects.Text;
-
-  constructor(scene: Scene, options: TextButtonOptions) {
-    this.button = scene.add
-      .sprite(options.x, options.y, 'button.gray')
-      .setInteractive() as Phaser.GameObjects.Sprite;
-
-    this.text = scene.add.text(0, 0, options.label, {
-      color: '#000',
-      fontFamily: 'Titillium Web',
-      fontSize: 24,
-    });
-
-    this.up();
-
-    this.button.on('pointerdown', () => {
-      this.down();
-    });
-
-    this.button.on('pointerup', ev => {
-      this.up();
-      scene.sound.play('click');
-      setTimeout(() => {
-        options.onClick();
-      }, 100);
-    });
-
-    this.button.on('pointerout', () => {
-      this.text.setStyle({...this.text.style, color: '#000 '});
-      this.up();
-    });
-  }
-
-  private up = () => {
-    this.button.setFrame(0);
-    Phaser.Display.Bounds.CenterOn(
-      this.text,
-      Phaser.Display.Bounds.GetCenterX(this.button),
-      Phaser.Display.Bounds.GetCenterY(this.button) - 3
-    );
-  };
-
-  private down = () => {
-    this.button.setFrame(1);
-    Phaser.Display.Bounds.CenterOn(
-      this.text,
-      Phaser.Display.Bounds.GetCenterX(this.button),
-      Phaser.Display.Bounds.GetCenterY(this.button)
-    );
-  };
-}
+import {Scene} from 'phaser';
+import {GAME_WIDTH, GAME_HEIGHT, ASSET_KEYS} from '../constants';
+import {MenuButton} from '../components/menu-button';
 
 export class MenuScene extends Phaser.Scene {
   constructor() {
     super({
-      key: 'Scene.Menu',
+      key: ASSET_KEYS.SCENES.MENU,
     });
   }
   create(): void {
@@ -74,7 +14,7 @@ export class MenuScene extends Phaser.Scene {
       x: GAME_WIDTH / 2,
       y: GAME_HEIGHT / 2,
       onClick: () => {
-        this.scene.start('Scene.Platform');
+        this.scene.start(ASSET_KEYS.SCENES.PLATFORM);
       },
     });
 
@@ -82,7 +22,7 @@ export class MenuScene extends Phaser.Scene {
       label: 'Options',
       x: GAME_WIDTH / 2,
       y: GAME_HEIGHT / 2 + 80,
-      onClick: () => this.scene.start('Scene.Options'),
+      onClick: () => this.scene.start(ASSET_KEYS.SCENES.OPTIONS),
     });
   }
 }

@@ -1,15 +1,13 @@
-import {TetrisScene} from './tetris';
 import {SwitchableScene} from './switchable';
+import {ASSET_KEYS} from '../constants';
 
 export class PlatformScene extends SwitchableScene {
-  public static KEY = 'Scene.Platform';
-
   constructor() {
     super(
       {
-        key: PlatformScene.KEY,
+        key: ASSET_KEYS.SCENES.PLATFORM,
       },
-      TetrisScene.KEY
+      ASSET_KEYS.SCENES.TETRIS
     );
   }
   preload(): void {}
@@ -17,19 +15,18 @@ export class PlatformScene extends SwitchableScene {
   create(): void {
     this.initSwitching();
 
-    const map = this.make.tilemap({key: 'map'});
-    const groundTiles = map.addTilesetImage('tiles');
+    const map = this.make.tilemap({key: ASSET_KEYS.TILEMAPS.MAP});
+    const groundTiles = map.addTilesetImage(ASSET_KEYS.SPRITESHEETS.TILES);
     // create the ground layer
-    const groundLayer = map.createDynamicLayer(
-      'Tile Layer 1',
-      groundTiles,
-      0,
-      0
-    );
+    const groundLayer = map.createDynamicLayer('level-01', groundTiles, 0, 0);
+
+    groundLayer.putTileAt(1, 4, 5);
+    // groundLayer.putTileAtWorldXY(2, 200, 50);
+
     // the player will collide with this layer
     groundLayer.setCollisionByExclusion([-1]);
 
-    const player = this.physics.add.sprite(50, 600, 'player');
+    const player = this.physics.add.sprite(50, 600, ASSET_KEYS.IMAGES.PLAYER);
     this.physics.world.bounds.width = groundLayer.width;
     this.physics.world.bounds.height = groundLayer.height;
 
