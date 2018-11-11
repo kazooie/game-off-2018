@@ -10,9 +10,9 @@ const config: GameConfig = {
   parent: 'game',
   physics: {
     arcade: {
-      default: 'arcade',
       gravity: {y: 200},
     },
+    default: 'arcade',
   },
   scene: [LoadScene, MenuScene, PlatformScene, TetrisScene],
   type: Phaser.AUTO,
