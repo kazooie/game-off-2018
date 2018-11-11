@@ -68,22 +68,14 @@ export class MenuScene extends Phaser.Scene {
       key: 'Scene.Menu',
     });
   }
-
-  preload(): void {
-    this.load.audio('click', ['./assets/audio/menu/click.ogg']);
-    this.load.spritesheet('button.gray', './assets/menu/button.gray.png', {
-      frameWidth: 190,
-      frameHeight: 49,
-      startFrame: 1,
-    });
-  }
-
   create(): void {
     new MenuButton(this, {
       label: 'Start Game',
       x: GAME_WIDTH / 2,
       y: GAME_HEIGHT / 2,
-      onClick: () => this.scene.start('Scene.Main'),
+      onClick: () => {
+        this.scene.start('Scene.Platform');
+      },
     });
 
     new MenuButton(this, {

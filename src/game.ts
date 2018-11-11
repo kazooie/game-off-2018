@@ -1,16 +1,18 @@
 /// <reference path="./phaser.d.ts"/>
 
 import 'phaser';
-import {MainScene} from './scenes/main';
 import {MenuScene} from './scenes/menu';
 import {GAME_WIDTH, GAME_HEIGHT} from './constants';
+import {PlatformScene} from './scenes/platform';
+import {TetrisScene} from './scenes/tetris';
+import {LoadScene} from './scenes/load';
 
 const config: GameConfig = {
   width: GAME_WIDTH,
   height: GAME_HEIGHT,
   type: Phaser.AUTO,
   parent: 'game',
-  scene: [MenuScene, MainScene],
+  scene: [LoadScene, MenuScene, PlatformScene, TetrisScene],
   physics: {
     default: 'arcade',
     arcade: {
