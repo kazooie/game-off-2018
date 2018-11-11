@@ -3,15 +3,18 @@ export class MainScene extends Phaser.Scene {
 
   constructor() {
     super({
-      key: "MainScene"
+      key: 'MainScene',
     });
   }
 
-  preload(): void {
-    this.load.image("logo", "./assets/boilerplate/phaser.png");
-  }
+  preload(): void {}
 
   create(): void {
-    this.phaserSprite = this.add.sprite(400, 300, "logo");
+    const text = this.add.text(345, 285, 'MAIN SCENE', {
+      color: '#fff',
+      fontFamily: 'Titillium Web',
+      fontSize: 24,
+      align: 'center',
+    });
   }
 }
