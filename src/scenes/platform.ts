@@ -1,5 +1,5 @@
-import {SwitchableScene} from './switchable';
 import {ASSET_KEYS} from '../constants';
+import {SwitchableScene} from './switchable';
 
 export class PlatformScene extends SwitchableScene {
   constructor() {
@@ -10,9 +10,8 @@ export class PlatformScene extends SwitchableScene {
       ASSET_KEYS.SCENES.TETRIS
     );
   }
-  preload(): void {}
 
-  create(): void {
+  public create(): void {
     this.initSwitching();
 
     const map = this.make.tilemap({key: ASSET_KEYS.TILEMAPS.MAP});
@@ -39,6 +38,4 @@ export class PlatformScene extends SwitchableScene {
 
     this.cameras.main.setBackgroundColor('#444');
   }
-
-  update(): void {}
 }

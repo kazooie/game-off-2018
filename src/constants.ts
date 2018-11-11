@@ -6,22 +6,22 @@ export const GAME_HEIGHT = CELL_SIZE * 20;
 export const SWITCH_KEY = 'SPACE';
 
 export const ASSET_KEYS = {
-  SCENES: {
-    LOAD: 'scene.load',
-    MENU: 'scene.menu',
-    PLATFORM: 'scene.platform',
-    TETRIS: 'scene.tetris',
-    OPTIONS: 'scene.options',
-  },
-  SPRITESHEETS: {
-    BUTTON_GRAY: 'button.gray',
-    TILES: 'tiles',
+  AUDIO: {
+    CLICK: 'audio.click',
   },
   IMAGES: {
     PLAYER: 'player',
   },
-  AUDIO: {
-    CLICK: 'audio.click',
+  SCENES: {
+    LOAD: 'scene.load',
+    MENU: 'scene.menu',
+    OPTIONS: 'scene.options',
+    PLATFORM: 'scene.platform',
+    TETRIS: 'scene.tetris',
+  },
+  SPRITESHEETS: {
+    BUTTON_GRAY: 'button.gray',
+    TILES: 'tiles',
   },
   TILEMAPS: {
     MAP: 'map',

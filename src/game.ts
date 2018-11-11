@@ -1,32 +1,26 @@
-/// <reference path="./phaser.d.ts"/>
-
 import 'phaser';
+import {GAME_HEIGHT, GAME_WIDTH} from './constants';
+import {LoadScene} from './scenes/load';
 import {MenuScene} from './scenes/menu';
-import {GAME_WIDTH, GAME_HEIGHT} from './constants';
 import {PlatformScene} from './scenes/platform';
 import {TetrisScene} from './scenes/tetris';
-import {LoadScene} from './scenes/load';
 
 const config: GameConfig = {
-  width: GAME_WIDTH,
   height: GAME_HEIGHT,
-  type: Phaser.AUTO,
   parent: 'game',
-  scene: [LoadScene, MenuScene, PlatformScene, TetrisScene],
   physics: {
-    default: 'arcade',
     arcade: {
+      default: 'arcade',
       gravity: {y: 200},
     },
   },
+  scene: [LoadScene, MenuScene, PlatformScene, TetrisScene],
+  type: Phaser.AUTO,
+  width: GAME_WIDTH,
 };
 
-export class Game extends Phaser.Game {
-  constructor(config: GameConfig) {
-    super(config);
-  }
-}
+export class Game extends Phaser.Game {}
 
 window.onload = () => {
-  var game = new Game(config);
+  const game = new Game(config);
 };

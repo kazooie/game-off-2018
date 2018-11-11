@@ -12,12 +12,8 @@ export class SwitchableScene extends Phaser.Scene {
     this.switchScene = switchScene;
   }
 
-  private switch() {
-    if (!this.canSwitch) {
-      return;
-    }
-    this.scene.switch(this.switchScene);
-    this.canSwitch = false;
+  public create() {
+    throw new Error('DO NOT USE THIS CLASS DIRECTLY!');
   }
 
   protected initSwitching() {
@@ -30,7 +26,11 @@ export class SwitchableScene extends Phaser.Scene {
     });
   }
 
-  create() {
-    throw new Error('DO NOT USE THIS CLASS DIRECTLY!');
+  private switch() {
+    if (!this.canSwitch) {
+      return;
+    }
+    this.scene.switch(this.switchScene);
+    this.canSwitch = false;
   }
 }

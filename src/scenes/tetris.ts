@@ -2,7 +2,7 @@ import {ASSET_KEYS} from '../constants';
 import {SwitchableScene} from './switchable';
 
 export class TetrisScene extends SwitchableScene {
-  constructor(switchScene: string) {
+  constructor() {
     super(
       {
         key: ASSET_KEYS.SCENES.TETRIS,
@@ -11,12 +11,7 @@ export class TetrisScene extends SwitchableScene {
     );
   }
 
-  create(): void {
+  public create(): void {
     this.initSwitching();
-    this.events.on('wake', () => {
-      console.log('tetris!');
-    });
   }
-
-  update(): void {}
 }

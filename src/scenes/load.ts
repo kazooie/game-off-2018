@@ -7,14 +7,14 @@ export class LoadScene extends Phaser.Scene {
     });
   }
 
-  preload(): void {
+  public preload(): void {
     this.load.audio(ASSET_KEYS.AUDIO.CLICK, ['./assets/audio/menu/click.ogg']);
     this.load.spritesheet(
       ASSET_KEYS.SPRITESHEETS.BUTTON_GRAY,
       './assets/menu/button.gray.png',
       {
-        frameWidth: 190,
         frameHeight: 49,
+        frameWidth: 190,
         startFrame: 1,
       }
     );
@@ -26,8 +26,8 @@ export class LoadScene extends Phaser.Scene {
       ASSET_KEYS.SPRITESHEETS.TILES,
       './assets/placeholder/tiles.png',
       {
-        frameWidth: 70,
         frameHeight: 70,
+        frameWidth: 70,
       }
     );
     this.load.tilemapTiledJSON(
@@ -35,7 +35,8 @@ export class LoadScene extends Phaser.Scene {
       './assets/placeholder/map.json'
     );
   }
-  create(): void {
+
+  public create(): void {
     this.scene.start(ASSET_KEYS.SCENES.MENU);
   }
 }
