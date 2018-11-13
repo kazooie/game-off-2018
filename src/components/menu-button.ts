@@ -28,7 +28,7 @@ export class MenuButton {
       this.down();
     });
 
-    this.button.on('pointerup', ev => {
+    this.button.on('pointerup', () => {
       this.up();
       scene.sound.play(ASSET_KEYS.AUDIO.CLICK);
       setTimeout(() => {
