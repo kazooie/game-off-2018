@@ -26,8 +26,8 @@ export class LoadScene extends Phaser.Scene {
       ASSET_KEYS.SPRITESHEETS.TILES,
       './assets/placeholder/tiles.png',
       {
-        frameHeight: 70,
-        frameWidth: 70,
+        frameHeight: 32,
+        frameWidth: 32,
       }
     );
     this.load.tilemapTiledJSON(
@@ -37,6 +37,6 @@ export class LoadScene extends Phaser.Scene {
   }
 
   public create(): void {
-    this.scene.start(ASSET_KEYS.SCENES.MENU);
+    this.scene.start(ASSET_KEYS.SCENES.PLATFORM);
   }
 }

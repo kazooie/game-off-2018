@@ -1,4 +1,5 @@
 import {SWITCH_KEY} from '../constants';
+import {theStore} from '../store';
 
 export class SwitchableScene extends Phaser.Scene {
   private canSwitch: boolean = true;

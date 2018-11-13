@@ -1,6 +1,8 @@
 export const CELL_SIZE = 32;
-export const GAME_WIDTH = CELL_SIZE * 12;
-export const GAME_HEIGHT = CELL_SIZE * 20;
+export const WORLD_WIDTH = 12;
+export const WORLD_HEIGHT = 20;
+export const GAME_WIDTH = CELL_SIZE * WORLD_WIDTH;
+export const GAME_HEIGHT = CELL_SIZE * WORLD_HEIGHT;
 
 // The keyboard key that is used for switching between game modes.
 export const SWITCH_KEY = 'SPACE';
