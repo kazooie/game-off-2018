@@ -1,4 +1,10 @@
-import {ASSET_KEYS, CELL_SIZE, WORLD_HEIGHT, WORLD_WIDTH} from '../constants';
+import {
+  ASSET_KEYS,
+  CELL_SIZE,
+  PLAYER_SPEED,
+  WORLD_HEIGHT,
+  WORLD_WIDTH,
+} from '../constants';
 import {theStore} from '../store';
 import {Cell} from '../types';
 import {SwitchableScene} from './switchable';
@@ -7,7 +13,6 @@ export class PlatformScene extends SwitchableScene {
   private map: Phaser.Tilemaps.Tilemap;
   private groundTiles: Phaser.Tilemaps.Tileset;
   private groundLayer: Phaser.Tilemaps.DynamicTilemapLayer;
-  private staticLayer: Phaser.Tilemaps.StaticTilemapLayer;
   private cursors: any;
   private player: Phaser.Physics.Arcade.Sprite;
 
@@ -21,70 +26,57 @@ export class PlatformScene extends SwitchableScene {
   }
 
   public create(): void {
-    this.initSwitching();
+    super.create();
 
-    this.map = this.make.tilemap({key: ASSET_KEYS.TILEMAPS.MAP});
-    this.groundTiles = this.map.addTilesetImage(ASSET_KEYS.SPRITESHEETS.TILES);
+    this.createTiles();
     this.createGroundLayer();
+    this.createPlayer();
 
-    this.player = this.physics.add.sprite(
-      CELL_SIZE * 6,
-      CELL_SIZE * 17,
-      ASSET_KEYS.IMAGES.PLAYER
-    );
-
-    this.groundLayer.setCollisionByExclusion([-1]);
-    this.player.setBounce(0.2);
-    this.player.setCollideWorldBounds(true);
-    this.physics.add.collider(this.groundLayer, this.player);
+    const start = this.groundLayer.findByIndex(73);
+    this.player.setPosition(start.pixelX, start.pixelY);
 
     this.cursors = this.input.keyboard.createCursorKeys();
 
     this.cameras.main.setBackgroundColor('#444');
 
     this.events.addListener('sleep', () =>
-      theStore.setWorld(this.calculateWorld())
+      SwitchableScene.saveWorldFromLayer(this.groundLayer)
     );
 
-    this.events.addListener('wake', () => {
-      this.clearGroundLayer();
-      theStore.getWorld().map(cell => {
-        this.groundLayer
-          .putTileAt(cell[2], cell[0], cell[1])
-          .setCollision(true);
-      });
-    });
+    this.events.addListener('wake', () =>
+      SwitchableScene.buildLayerFromWorld(this.groundLayer)
+    );
   }
 
   public update() {
     if (this.cursors.left.isDown) {
       this.player.setFlipX(true);
-      this.player.body.setVelocityX(-50);
+      this.player.body.setVelocityX(-1 * PLAYER_SPEED);
     } else if (this.cursors.right.isDown) {
       this.player.setFlipX(false);
-      this.player.body.setVelocityX(50);
+      this.player.body.setVelocityX(PLAYER_SPEED);
     } else {
       this.player.body.setVelocityX(0);
     }
 
-    if (this.cursors.up.isDown && this.player.body.onFloor) {
-      this.player.body.setVelocityY(-100);
+    if (this.cursors.up.isDown && this.player.body.onFloor()) {
+      this.player.body.setVelocityY(-200);
     }
   }
 
-  private clearGroundLayer = () => {
-    this.groundLayer
-      .getTilesWithin(0, 0, WORLD_WIDTH, WORLD_HEIGHT)
-      .forEach(tile => this.groundLayer.removeTileAt(tile.x, tile.y, 0));
+  private createPlayer = () => {
+    this.player = this.physics.add.sprite(0, 0, ASSET_KEYS.IMAGES.PLAYER);
+    this.player.setSize(16, 32);
+
+    this.groundLayer.setCollisionByExclusion([-1, 58, 57, 73, 77]);
+    this.player.setBounce(0.2);
+    this.player.setCollideWorldBounds(true);
+    this.physics.add.collider(this.groundLayer, this.player);
   };
 
-  private calculateWorld = (): Cell[] => {
-    return this.groundLayer
-      .getTilesWithin(0, 0, WORLD_WIDTH, WORLD_HEIGHT)
-      .filter(tile => tile.index >= 0)
-      .map(tile => {
-        return [tile.x, tile.y, tile.index];
-      });
+  private createTiles = () => {
+    this.map = this.make.tilemap({key: ASSET_KEYS.TILEMAPS.MAP});
+    this.groundTiles = this.map.addTilesetImage(ASSET_KEYS.SPRITESHEETS.TILES);
   };
 
   private createGroundLayer = () => {
@@ -97,9 +89,5 @@ export class PlatformScene extends SwitchableScene {
       0,
       0
     );
-    this.clearGroundLayer();
-    for (let x = 0; x < WORLD_WIDTH; x += 1) {
-      this.groundLayer.putTileAt(1, x, 18);
-    }
   };
 }

@@ -15,7 +15,7 @@ class Store {
     this.world = [...cells];
   };
 
-  public getWorld = () => {
+  public getWorld = (): Cell[] => {
     return [...this.world];
   };
 }

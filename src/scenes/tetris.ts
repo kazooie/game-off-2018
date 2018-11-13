@@ -1,6 +1,6 @@
 import {TetrisPiece} from '../components/tetris-piece';
 import {ASSET_KEYS, CELL_SIZE, WORLD_HEIGHT, WORLD_WIDTH} from '../constants';
-import {theStore} from '../store';
+import {Cell} from '../types';
 import {SwitchableScene} from './switchable';
 
 export class TetrisScene extends SwitchableScene {
@@ -18,26 +18,20 @@ export class TetrisScene extends SwitchableScene {
   }
 
   public create(): void {
-    this.initSwitching();
+    super.create();
+
     this.createBlockLayer();
 
     this.events.on('wake', () => {
-      this.loadFromStore();
+      SwitchableScene.buildLayerFromWorld(this.blockLayer);
       this.createPiece();
     });
 
-    this.loadFromStore();
+    SwitchableScene.buildLayerFromWorld(this.blockLayer);
 
     this.events.on('sleep', () => {
       this.piece.destroy();
-      theStore.setWorld(
-        this.blockLayer
-          .getTilesWithin(0, 0, WORLD_WIDTH, WORLD_HEIGHT)
-          .filter(tile => tile.index >= 0)
-          .map(tile => {
-            return [tile.x, tile.y, tile.index];
-          })
-      );
+      SwitchableScene.saveWorldFromLayer(this.blockLayer);
     });
 
     this.createPiece();
@@ -74,13 +68,6 @@ export class TetrisScene extends SwitchableScene {
     this.timer = this.time.addEvent(moveConfig);
   }
 
-  private loadFromStore = () => {
-    const world = theStore.getWorld();
-    world.forEach(cell => {
-      this.blockLayer.putTileAt(cell[2], cell[0], cell[1]);
-    });
-  };
-
   private createBlockLayer = () => {
     const map = this.make.tilemap({key: ASSET_KEYS.TILEMAPS.MAP});
     const blockTiles = map.addTilesetImage(ASSET_KEYS.SPRITESHEETS.TILES);
@@ -88,16 +75,12 @@ export class TetrisScene extends SwitchableScene {
   };
 
   private createPiece = () => {
-    this.piece = new TetrisPiece(
-      this,
-      this.blockLayer,
-      (blocks: number[][]) => {
-        blocks.forEach(block =>
-          this.blockLayer.putTileAt(block[2] + 1, block[0], block[1])
-        );
-        this.piece.destroy();
-        this.createPiece();
-      }
-    );
+    this.piece = new TetrisPiece(this, this.blockLayer, (blocks: Cell[]) => {
+      blocks.forEach(block =>
+        this.blockLayer.putTileAt(block.type + 1, block.x, block.y)
+      );
+      this.piece.destroy();
+      this.createPiece();
+    });
   };
 }

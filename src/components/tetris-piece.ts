@@ -1,5 +1,5 @@
 import {ASSET_KEYS, CELL_SIZE, WORLD_HEIGHT, WORLD_WIDTH} from '../constants';
-import {Cell} from '../types';
+import {Cell, CellType} from '../types';
 
 export class TetrisPiece {
   public group: Phaser.GameObjects.Group;
@@ -14,24 +14,29 @@ export class TetrisPiece {
   constructor(
     scene: Phaser.Scene,
     blockLayer: Phaser.Tilemaps.DynamicTilemapLayer,
-    callback: (blocks: number[][]) => void
+    callback: (blocks: Cell[]) => void
   ) {
     this.scene = scene;
     this.blockLayer = blockLayer;
     this.callback = callback;
 
     this.group = new Phaser.GameObjects.Group(this.scene);
-    this.shape = [[0, 0, 1], [1, 0, 1], [2, 0, 1], [3, 0, 1]];
+    this.shape = [
+      {x: 0, y: 0, type: CellType.GRASS},
+      {x: 1, y: 0, type: CellType.GRASS},
+      {x: 2, y: 0, type: CellType.GRASS},
+      {x: 3, y: 0, type: CellType.GRASS},
+    ];
 
     this.piece = scene.add.container(
       0,
       0,
       this.shape.map((b, i) => {
         const block = scene.physics.add.image(
-          b[0] * CELL_SIZE,
-          b[1] * CELL_SIZE,
+          b.x * CELL_SIZE,
+          b.y * CELL_SIZE,
           ASSET_KEYS.SPRITESHEETS.TILES,
-          b[2]
+          b.type
         );
         block.setOrigin(0, 0);
         block.body.setAllowGravity(false);
@@ -93,27 +98,27 @@ export class TetrisPiece {
 
   private die = () => {
     this.callback(
-      this.shape.map(s => [
-        s[0] + this.worldPosition.x,
-        s[1] + this.worldPosition.y,
-        s[2],
-      ])
+      this.shape.map(s => ({
+        type: s.type,
+        x: s.x + this.worldPosition.x,
+        y: s.y + this.worldPosition.y,
+      }))
     );
   };
 
   private cellX = (cell: Cell) => {
-    return cell[0] + this.worldPosition.x;
+    return cell.x + this.worldPosition.x;
   };
 
   private cellY = (cell: Cell) => {
-    return cell[1] + this.worldPosition.y;
+    return cell.y + this.worldPosition.y;
   };
 
   private areThereBlocksAt = (dx: number, dy: number): boolean => {
     for (const cell of this.shape) {
       const block = this.blockLayer.getTileAt(
-        this.worldPosition.x + cell[0] + dx,
-        this.worldPosition.y + cell[1] + dy
+        this.worldPosition.x + cell.x + dx,
+        this.worldPosition.y + cell.y + dy
       );
       if (block !== null) {
         return true;
@@ -138,8 +143,8 @@ export class TetrisPiece {
   private animateToPosition(x: number, y: number) {
     this.moveTween = this.scene.tweens.add({
       duration: 500,
-      ease: 'Cubic', // 'Cubic', 'Elastic', 'Bounce', 'Back'
-      repeat: 0, // -1: infinity
+      ease: 'Cubic',
+      repeat: 0,
       targets: this.piece,
       x,
       y,

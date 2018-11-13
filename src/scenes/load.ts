@@ -37,6 +37,11 @@ export class LoadScene extends Phaser.Scene {
   }
 
   public create(): void {
-    this.scene.start(ASSET_KEYS.SCENES.MENU);
+    const query = new URLSearchParams(window.location.search);
+    this.scene.start(
+      query.has('skip_menu')
+        ? ASSET_KEYS.SCENES.PLATFORM
+        : ASSET_KEYS.SCENES.MENU
+    );
   }
 }

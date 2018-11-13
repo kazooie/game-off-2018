@@ -5,12 +5,15 @@ import {MenuScene} from './scenes/menu';
 import {PlatformScene} from './scenes/platform';
 import {TetrisScene} from './scenes/tetris';
 
+const query = new URLSearchParams(window.location.search);
+
 const config: GameConfig = {
   height: GAME_HEIGHT,
   parent: 'game',
   physics: {
     arcade: {
-      gravity: {y: 200},
+      debug: query.has('debug'),
+      gravity: {y: 500},
     },
     default: 'arcade',
   },
