@@ -37,6 +37,6 @@ export class LoadScene extends Phaser.Scene {
   }
 
   public create(): void {
-    this.scene.start(ASSET_KEYS.SCENES.PLATFORM);
+    this.scene.start(ASSET_KEYS.SCENES.MENU);
   }
 }
