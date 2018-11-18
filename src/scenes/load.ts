@@ -18,10 +18,7 @@ export class LoadScene extends Phaser.Scene {
         startFrame: 1,
       }
     );
-    this.load.image(
-      ASSET_KEYS.IMAGES.PLAYER,
-      './assets/placeholder/player.png'
-    );
+    this.load.image(ASSET_KEYS.IMAGES.PLAYER, './assets/sprites/player.png');
     this.load.spritesheet(
       ASSET_KEYS.SPRITESHEETS.TILES,
       './assets/placeholder/tiles.png',

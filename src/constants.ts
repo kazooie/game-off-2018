@@ -7,7 +7,7 @@ export const GAME_HEIGHT = CELL_SIZE * WORLD_HEIGHT;
 // The keyboard key that is used for switching between game modes.
 export const SWITCH_KEY = 'SHIFT';
 
-export const PLAYER_SPEED = 100;
+export const PLAYER_SPEED = 400;
 
 export const ASSET_KEYS = {
   AUDIO: {
